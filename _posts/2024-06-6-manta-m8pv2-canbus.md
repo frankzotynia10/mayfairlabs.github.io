@@ -5,7 +5,6 @@ date: 2024-06-6
 categories: [3dprinting, firmware]
 tags: [3dprinting,firmware,klipper]
 description: Flashing katapult and klipper on a m8p board
-media_subpath: /assets/img/posts
 ---
 
 # Katapult and Klipper Setup for Bigtreetech Manta M8p v2
