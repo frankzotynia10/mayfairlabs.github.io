@@ -13,7 +13,7 @@ I am always fumbling when flashing a bootloader and firmware to my Manta M8P v2 
 
 ## Canbus Board Prep
 Place jumper on 120 ohm resistor pins.  These pins can be found just south of the CPU.
-![alt text](</assets/img/posts/2024-06-6/BIGTREETECH MANTA M8P V2.0 120R.png>)
+![Alt text](/assets/img/posts/2024-06-6/BIGTREETECH MANTA M8P V2.0 120R.png)
 
 ## Clone and build katapult on the Raspberry Pi
 We need to build the bootloader. To do this, we will use Katapult.
@@ -29,7 +29,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![alt text](/assets/img/posts/2024-06-6/katapult_m8pv2.png)
+![Alt text](/assets/img/posts/2024-06-6/katapult_m8pv2.png)
 
 Q to exit, Y to save
 
@@ -50,7 +50,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![alt text](/assets/img/posts/2024-06-6/klipper_m8pv2.png)
+![Alt text](/assets/img/posts/2024-06-6/klipper_m8pv2.png)
 
 Q to exit, Y to save
 
