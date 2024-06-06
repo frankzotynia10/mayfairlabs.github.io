@@ -1,3 +1,12 @@
+---
+title: Katapult and Klipper Setup for Bigtreetech Manta M8p v2
+date: 2024-06-05 09:00:00 -0500
+categories: [3dprinting, firmware]
+tags: [3dprinting,firmware,klipper]
+description: Flashing katapult and klipper on a m8p board
+media_subpath: /assets/lib/
+---
+
 # Katapult and Klipper Setup for Bigtreetech Manta M8p v2
 
 I am always fumbling when flashing a bootloader and firmware to my Manta M8P v2 board. I run a canbus setup and the BTT documentation does not cover it.
