@@ -12,7 +12,7 @@ I am always fumbling when flashing a bootloader and firmware to my Manta M8P v2 
 
 ## Canbus Board Prep
 Place jumper on 120 ohm resistor pins.  These pins can be found just south of the CPU.
-![Alt text]/(assets/img/posts/2024-06-6/BIGTREETECH-MANTA-M8P-V2.0-120R.png)
+![Manta M8p Pinout](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/manta-m8pv2-canbus/BIGTREETECH-MANTA-M8P-V2.0-120R.png)
 
 ## Clone and build katapult on the Raspberry Pi
 We need to build the bootloader. To do this, we will use Katapult.
@@ -28,7 +28,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![Alt text](/assets/img/posts/manta-m8pv2-canbus/BIGTREETECH-MANTA-M8P-V2.0-120R.png))
+![Katapult Config](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/manta-m8pv2-canbus/katapult_m8pv2.png))
 
 Q to exit, Y to save
 
@@ -49,7 +49,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![Alt text](/assets/img/posts/manta-m8pv2-canbus/klipper_m8pv2.png)
+![Klipper Config](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/manta-m8pv2-canbus/klipper_m8pv2.png)
 
 Q to exit, Y to save
 
@@ -64,7 +64,7 @@ make
 Now we have to get the M8P in DFU mode to flash the bootloader.
 
 On the board, you will find three buttons labled Boot0, Boot1 and Reset.  I use a plastic cap on a ballpoint pen to hold down Boot0 and then just tap reset once.
-!(https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/2024-06-8/image.png)
+![Manta M8p Mainboard](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/manta-m8pv2-canbus/m8pv2.jpg)
 
 Next on the pi, type
 
