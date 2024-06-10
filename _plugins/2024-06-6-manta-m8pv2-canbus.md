@@ -64,7 +64,7 @@ make
 Now we have to get the M8P in DFU mode to flash the bootloader.
 
 On the board, you will find three buttons labled Boot0, Boot1 and Reset.  I use a plastic cap on a ballpoint pen to hold down Boot0 and then just tap reset once.
-![Alt text](/assets/img/posts/2024-06-6/m8pv2.jpg)
+![Alt text](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/2024-06-8/image.png
 
 Next on the pi, type
 
