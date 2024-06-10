@@ -7,9 +7,9 @@ tags: [3dprinting,firmware,klipper]
 description: Flashing katapult and klipper on a m8p board
 ---
 
-![BIGTREETECH MANTA M8P V2.0 120R](assets/img/posts/2024-06-6/BIGTREETECH-MANTA-M8P-V2.0-120R.png)
-![Katapult M8P V2](assets/img/posts/2024-06-6/katapult_m8pv2.png)
-![Klipper M8P V2](assets/img/posts/2024-06-6/klipper_m8pv2.png)
+![BIGTREETECH MANTA M8P V2.0 120R](/assets/img/posts/2024-06-6/BIGTREETECH-MANTA-M8P-V2.0-120R.png)
+![Katapult M8P V2]/(assets/img/posts/2024-06-6/katapult_m8pv2.png)
+![Klipper M8P V2](/assets/img/posts/2024-06-6/klipper_m8pv2.png)
 
 # Katapult and Klipper Setup for Bigtreetech Manta M8p v2
 
@@ -17,7 +17,7 @@ I am always fumbling when flashing a bootloader and firmware to my Manta M8P v2 
 
 ## Canbus Board Prep
 Place jumper on 120 ohm resistor pins.  These pins can be found just south of the CPU.
-![Alt text](/assets/img/posts/2024-06-6/BIGTREETECH_MANTA_M8P_V2.0120R.png)
+![Alt text]/(assets/img/posts/2024-06-6/BIGTREETECH-MANTA-M8P-V2.0-120R.png)
 
 ## Clone and build katapult on the Raspberry Pi
 We need to build the bootloader. To do this, we will use Katapult.
