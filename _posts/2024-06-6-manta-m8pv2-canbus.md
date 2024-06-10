@@ -28,7 +28,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![Alt text](/assets/img/posts/2024-06-6/katapult_m8pv2.png)
+![Alt text](/assets/img/posts/manta-m8pv2-canbus/BIGTREETECH-MANTA-M8P-V2.0-120R.png))
 
 Q to exit, Y to save
 
@@ -49,7 +49,7 @@ make menuconfig
 
 When the config comes up, set the parameters like this
 
-![Alt text](/assets/img/posts/2024-06-6/klipper_m8pv2.png)
+![Alt text](/assets/img/posts/manta-m8pv2-canbus/klipper_m8pv2.png)
 
 Q to exit, Y to save
 
@@ -64,7 +64,7 @@ make
 Now we have to get the M8P in DFU mode to flash the bootloader.
 
 On the board, you will find three buttons labled Boot0, Boot1 and Reset.  I use a plastic cap on a ballpoint pen to hold down Boot0 and then just tap reset once.
-![Alt text](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/2024-06-8/image.png
+!(https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/2024-06-8/image.png)
 
 Next on the pi, type
 
