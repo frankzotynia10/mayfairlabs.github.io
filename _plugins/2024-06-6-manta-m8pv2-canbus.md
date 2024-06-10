@@ -61,7 +61,7 @@ make
 {% endhighlight %}
 
 ## DFU Mode
-No we have to get the M8P in DFU mode to flash the bootloader.
+Now we have to get the M8P in DFU mode to flash the bootloader.
 
 On the board, you will find three buttons labled Boot0, Boot1 and Reset.  I use a plastic cap on a ballpoint pen to hold down Boot0 and then just tap reset once.
 ![Alt text](/assets/img/posts/2024-06-6/m8pv2.jpg)
@@ -147,12 +147,12 @@ sudo nano /etc/network/interfaces.d/can0
 
 and put this in that file.
 
-```bash
+{% highlight bash %}
 allow-hotplug can0
 iface can0 can static
  bitrate 250000
  up ifconfig $IFACE txqueuelen 1024
-```
+{% endhighlight %}
 
 Next, netplan is up. Edit this file.
 
@@ -162,13 +162,13 @@ sudo nano /etc/systemd/network/10-can.link
 
 and put this in there.
 
-```bash
+{% highlight bash %}
 [Match]
 Type=can
 
 [Link]
 TransmitQueueLength=1024
-```
+{% endhighlight %}
 
 Then edit this file.
 {% highlight bash %}
@@ -177,13 +177,13 @@ sudo nano /etc/systemd/network/25-can.network
 
 and put this in there.
 
-```bash
+{% highlight bash %}
 [Match]
 Name=can*
 
 [CAN]
 BitRate=1M
-```
+{% endhighlight %}
 
 ## Find the canbus ID
 
@@ -205,12 +205,12 @@ Query Complete
 
 Copy that UUID and open up the printer.cfg in Mainsail.  Format it like this.
 
-```bash
+{% highlight bash %}
 [mcu]
 #   Configuration of the primary micro-controller.
 canbus_uuid: 96d2ef01b2cc
 canbus_interface: can0
-```
+{% endhighlight %}
 
 ## Final Step
 reboot and verify Mainsail can connect to the board.
