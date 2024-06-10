@@ -4,6 +4,9 @@ source "https://rubygems.org"
 
 gem "jekyll-theme-chirpy", "~> 7.0", ">= 7.0.1"
 
+gem "jekyll", "~> 4.3"
+gem "jekyll-seo-tag"
+
 gem "tzinfo-data"
 
 group :test do
