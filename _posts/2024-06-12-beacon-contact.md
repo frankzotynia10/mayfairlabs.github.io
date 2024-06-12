@@ -10,7 +10,7 @@ description: Setting Up Beacon Contact
 # Beacon
 
 ![Beacon Rev H](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/beacon-contact/RevD-her.png)  
-photo: beacon3d.com
+photo: [beacon3d.com](https://beacon3d.com/)
 
 Creating a map of a build surface is nothing new. There have been a number of options dating back years, but a few months ago, something caught my eye.
 
