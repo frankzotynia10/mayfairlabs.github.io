@@ -9,7 +9,7 @@ description: Setting Up Beacon Contact
 
 # Beacon
 
-![Beacon Rev H](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/beacon-contacts/RevD-her.png)  
+![Beacon Rev H](https://raw.githubusercontent.com/frankzotynia10/mayfairlabs.github.io/main/assets/img/posts/beacon-contact/RevD-her.png)  
 photo: beacon3d.com
 
 Creating a map of a build surface is nothing new. There have been a number of options dating back years, but a few months ago, something caught my eye.
@@ -22,15 +22,15 @@ In fact, all of the firmware flashing is scripted. The hardest part about settin
 
 Once the part is printed and installed, run the USB cable back to your Raspberry Pi. No canbus for Beacon, unfortunately. SSH into the Pi and run this:
 
-```bash
+{% highlight bash %}
 cd ~
 git clone https://github.com/beacon3d/beacon_klipper.git
 ./beacon_klipper/install.sh
-```
+{% endhighlight %}
 
 Now in Mainsail, go to `moonraker.conf` and add this block to the bottom. This will keep the Beacon software up to date with the rest of your system.
 
-```bash
+{% highlight bash %}
 [update_manager beacon]
 type: git_repo
 channel: dev
@@ -43,18 +43,18 @@ is_system_service: False
 managed_services: klipper
 info_tags:
   desc=Beacon Surface Scanner
-```
+{% endhighlight %}
 
 # Klipper Configuration
 
 Run `lsusb` on the Pi and copy the serial for your Beacon. Then in Mainsail, edit your `printer.cfg` with the following:
 
-```bash
+{% highlight bash %}
 [beacon]
 serial: /dev/serial/by-id/usb-Beacon_Beacon_RevD_<..addyourserial..>-if00
 x_offset: 0 # update with offset from nozzle on your machine. This is my Stealthburner setup.
 y_offset: 31 # update with offset from nozzle on your machine. This is my Stealthburn
-```
+{% endhighlight %}
 
 The offsets are important, and here's why. When Beacon calibrates for contact, it will probe three times and then move the nozzle to the probe location to take its final measurement. It needs to know where that probe is. Also, it's important for the printer to know so it doesn't try to probe off the bed.
 
@@ -63,27 +63,27 @@ The offsets are important, and here's why. When Beacon calibrates for contact, i
 
 For the initial functionality test, let's set up `safe_z_home`. This will ensure that the print head is in the center of the bed whenever the Z is homed. Otherwise, the probe could be hanging off the side and crash the head.
 
-```bash
+{% highlight bash %}
 [safe_z_home]
 home_xy_position: 130, 130 # update for your machine
 z_hop: 5
-```
+{% endhighlight %}
 
 Now, we need to update the Z endstop to use the probe.
 
-```bash
+{% highlight bash %}
 [stepper_z]
 endstop_pin: probe:z_virtual_endstop # use Beacon as virtual endstop
 homing_retract_dist: 0 # Beacon needs this to be set to 0
-```
+{% endhighlight %}
 
 If you have a Rev H Beacon, you can configure the accelerometer for input shaping.
 
-```bash
+{% highlight bash %}
 [resonance_tester]
 accel_chip: beacon
 probe_points: 130, 130, 20 # center of your bed. 20 on the Z
-```
+{% endhighlight %}
 
 Make sure to remove any old `[probe]` configurations from your `printer.cfg`. Save and restart.
 
@@ -91,28 +91,28 @@ Make sure to remove any old `[probe]` configurations from your `printer.cfg`. Sa
 
 Home X and Y:
 
-```bash
+{% highlight bash %}
 G28 X Y
-```
+{% endhighlight %}
 
 Move the nozzle to the center of the bed:
 
-```bash
+{% highlight bash %}
 G0 X130 Y130
-```
+{% endhighlight %}
 
 Now we need to run a calibration:
 
-```bash
+{% highlight bash %}
 BEACON_CALIBRATE
-```
+{% endhighlight %}
 
 Grab a piece of paper and put it under the nozzle. Bring the nozzle down until you can feel it dragging. Once you feel like it's in a good spot, type this into the console:
 
-```bash
+{% highlight bash %}
 ACCEPT
 SAVE_CONFIG
-```
+{% endhighlight %}
 
 The Beacon software will store a bunch of configs in your `printer.cfg` SAVE_CONFIG at the bottom.
 
@@ -122,23 +122,23 @@ As with any probe, you have to prepare for the worst. In this case, it's the too
 
 Home XYZ. Watch it carefully as the tool head nears the bed. If it looks like it's not going to stop, kill the power and ensure everything is mounted properly.
 
-```bash
+{% highlight bash %}
 G28 X Y Z
-```
+{% endhighlight %}
 
 Let's check the accuracy:
 
-```bash
+{% highlight bash %}
 PROBE_ACCURACY
-```
+{% endhighlight %}
 
 This should be a very small number <0.001.
 
 Finally, let's check the backlash in your Z leadscrew(s):
 
-```bash
+{% highlight bash %}
 BEACON_ESTIMATE_BACKLASH
-```
+{% endhighlight %}
 
 Again, this should be a very small number. If it's high, check that the anti-backlash nut is installed properly or replace your leadscrews and nuts.
 
@@ -148,7 +148,7 @@ Everyone's favorite. Let's see how this thing moves.
 
 In `printer.cfg`, add this block:
 
-```bash
+{% highlight bash %}
 [bed_mesh]
 algorithm: bicubic
 horizontal_move_z: 5
@@ -160,7 +160,7 @@ probe_count: 51, 51
 fade_start: 1.0
 fade_end: 10
 fade_target: 0
-```
+{% endhighlight %}
 
 Some notes about `mesh_min` and `mesh_max`. Home X and Y and move the print head so Beacon is completely on the bed surface in all directions. This is your `mesh_min`.
 
@@ -170,9 +170,9 @@ Then move X and Y to their max position and dial it back until Beacon is on the 
 
 Fade is optional. These are Klipper defaults:
 
-```bash
+{% highlight bash %}
 BED_MESH_CALIBRATE
-```
+{% endhighlight %}
 
 Now sit back and watch it fly.
 
@@ -184,7 +184,7 @@ Contact requires a clean nozzle to be accurate. Keep the nozzle clean with a bra
 
 In `printer.cfg`, under `[beacon]`, replace it with this:
 
-```bash
+{% highlight bash %}
 [beacon]
 serial: /dev/serial/by-id/usb-Beacon_Beacon_RevD_<..addyourserial..>-if00
 x_offset: 0 # update with offset from nozzle on your machine
@@ -199,7 +199,7 @@ home_z_hop_speed: 30
 home_method: contact # use proximity for induction homing
 home_method_when_homed: proximity # after initial calibration use induction
 home_autocalibrate: unhomed # contact will calibrate beacon on first home
-```
+{% endhighlight %}
 
 - `contact_max_hotend_temperature`: Set this to your print temp.
 - `home_method`: On first home, the nozzle will come down slowly and actually touch the bed.
@@ -216,7 +216,7 @@ Well, I would, but I'm using a great add-on from jschul called [klipper-macros](
 
 First, let's look at what Beacon suggests our start gcode looks like.
 
-```bash
+{% highlight bash %}
 BED_MESH_CLEAR
 SET_GCODE_OFFSET Z=0
 
@@ -246,7 +246,7 @@ SET_GCODE_OFFSET Z_ADJUST={OFFSET}  ; apply optional material squish via slicer
 
 PRIME_NOZZLE    ; call another macro to purge or prime nozzle
 ; start printing
-```
+{% endhighlight %}
 
 - <span style="color:red">The first commands we need to pull out of here is to clear the mesh and set the offset to 0.</span>
 - <span style="color:green">Preheating the nozzle and bed will be done by KM.</span>
@@ -261,7 +261,7 @@ Everything in green is handled by the start KM macro. Everything in red is what 
 
 Next, let's take a look at my PrusaSlicer Start Gcode. There is nothing fancy in here. Just what is required from klipper-macros.
 
-```bash
+{% highlight bash %}
 SET_PRINT_STATS_INFO TOTAL_LAYER=[total_layer_count]
 
 _PRINT_START_PHASE_INIT EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
@@ -273,7 +273,7 @@ _PRINT_START_PHASE_PROBING
 _PRINT_START_PHASE_EXTRUDER
 ; Insert custom gcode here.
 _PRINT_START_PHASE_PURGE
-```
+{% endhighlight %}
 
 You can see that the start macro is phased into different sections. Let's break this down a little bit.
 
@@ -293,7 +293,7 @@ You can see that the start macro is phased into different sections. Let's break 
 
 In order to override this KM macro, we need to get into `macros.cfg` in Mainsail. At the bottom of this file, let's add this block.
 
-```bash
+{% highlight bash %}
 [gcode_macro _PRINT_START_PHASE_PROBING]
 rename_existing: KM_PRINT_START_PHASE_PROBING
 gcode:
@@ -309,7 +309,7 @@ gcode:
   # Custom commands to run after the original _PRINT_START_PHASE_PROBING (if any)
   WIPE_NOZZLE
   G28 Z METHOD=CONTACT CALIBRATE=0    ; calibrate z offset only after tilt/mesh
-```
+{% endhighlight %}
 
 The breakdown:
 
