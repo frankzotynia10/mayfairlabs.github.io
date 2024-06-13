@@ -294,7 +294,7 @@ You can see that the start macro is phased into different sections. Let's break 
 
 In order to override this KM macro, we need to get into `macros.cfg` in Mainsail. At the bottom of this file, let's add these blocks.
 
-This first one will override the PREHEAT macro to move our probe into position and wait 4 minutes for it to heatsaok.
+This first one will override the PREHEAT macro to move our probe into position and wait for it to heatsaok.
 
 {% highlight bash %}
 [gcode_macro _PRINT_START_PHASE_PREHEAT]
@@ -368,3 +368,5 @@ Save `macros.cfg` and then restart..
 # Test the new macro
 
 Send a file to the printer and kick it off.  Tweak anything required after that. 
+
+After all this, I probably should have just forked klipper-macros...
