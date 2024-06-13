@@ -263,6 +263,10 @@ Everything in green is handled by the start KM macro. Everything in red is what 
 Next, let's take a look at my PrusaSlicer Start Gcode. There is nothing fancy in here. Just what is required from klipper-macros.
 
 {% highlight bash %}
+{if filament_notes[0]=~/heated_chamber/}
+    SET_CHAMBER_TEMPERATURE TEMPERATURE=35
+{endif}
+
 SET_PRINT_STATS_INFO TOTAL_LAYER=[total_layer_count]
 
 _PRINT_START_PHASE_INIT EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
@@ -277,6 +281,8 @@ _PRINT_START_PHASE_PURGE
 {% endhighlight %}
 
 You can see that the start macro is phased into different sections. Let's break this down a little bit.
+
+- `{if filament_notes[0]=~/heated_chamber/} ....{endif}}` - this is related to filament settings and a heated chamber.  This can be ignored for this exercise.
 
 - `SET_PRINT_STATS_INFO TOTAL_LAYER=[total_layer_count]` - this is for Mainsail and klipperscreen to get layer counts.  This does not need to change.
 
