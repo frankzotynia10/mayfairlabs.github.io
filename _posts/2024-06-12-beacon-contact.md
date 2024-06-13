@@ -180,7 +180,7 @@ Now sit back and watch it fly.
 
 Now that everything is operating as intended, let's set up contact. The Beacon docs have a lot to say about it because it can potentially cause damage to your printer if you're not careful. Up until now, there has been no nozzle-to-bed contact at all. This is about to change. BE WARNED!
 
-Contact requires a clean nozzle to be accurate. Keep the nozzle clean with a brass brush before probing. This will be difficult with something like PETG, as it tends to ooze a lot.
+Contact requires a clean nozzle to be accurate. Keep the nozzle clean with a nylon or rubber brush before probing. Do not use a brass brush.  It will damage the coil on Beacon.
 
 In `printer.cfg`, under `[beacon]`, replace it with this:
 
@@ -212,7 +212,7 @@ Now we need to either remove safe_z_homing or comment it out.  Beacon will handl
 
 Here is where my opinion differs from the Beacon docs. They suggest putting the contact commands in the slicer start gcode. I don't like to put anything printer-specific in there. I have a tendency to forget to change profiles, and I don't want anything to crash or cause damage. So instead, I will put all of this stuff in my PRINT_START macro.
 
-Well, I would, but I'm using a great add-on from jschul called [klipper-macros](https://github.com/jschuh/klipper-macros).  t's certainly a topic for another day, but it basically breaks out the PRINT_START macro into a bunch of smaller macros that get called sequentially.
+Well, I would, but I'm using a great add-on from jschul called [klipper-macros](https://github.com/jschuh/klipper-macros).  It's certainly a topic for another day, but it basically breaks out the PRINT_START macro into a bunch of smaller macros that get called sequentially.
 
 First, let's look at what Beacon suggests our start gcode looks like.
 
