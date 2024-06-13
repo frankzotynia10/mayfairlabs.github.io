@@ -249,6 +249,7 @@ PRIME_NOZZLE    ; call another macro to purge or prime nozzle
 {% endhighlight %}
 
 - <span style="color:red">The first commands we need to pull out of here is to clear the mesh and set the offset to 0.</span>
+- <span style="color:red">Move probe to 2mm to heatsoak it</span>
 - <span style="color:green">Preheating the nozzle and bed will be done by KM.</span>
 - <span style="color:red">contact calibrate will need to be added</span>
 - <span style="color:green">z_tilt_adjust and bed mesh are handled by KM</span>
@@ -257,7 +258,7 @@ PRIME_NOZZLE    ; call another macro to purge or prime nozzle
 
 Everything in green is handled by the start KM macro. Everything in red is what we will need to override.
 
-# Setting up PRINT_START Macros
+# Interpreting PRINT_START Macros
 
 Next, let's take a look at my PrusaSlicer Start Gcode. There is nothing fancy in here. Just what is required from klipper-macros.
 
@@ -281,7 +282,7 @@ You can see that the start macro is phased into different sections. Let's break 
 
 - `_PRINT_START_PHASE_INIT EXTRUDER` - this passes through variables from your slicer.  Lets leave this one alone as well.
 
-- `_PRINT_START_PHASE_PREHEAT` - This preheats the nozzle and bed.  Since most of our commands are after the preheat, let's let this one stay default.
+- `_PRINT_START_PHASE_PREHEAT` - This preheats the nozzle and bed.  Lets move Beacon in position to heat soak here.
 
 - `_PRINT_START_PHASE_PROBING` - This starts `z_tilt_adjust` and probing.  Here is where I will want to insert the clear mesh, clear z_offset, and run a probe calibrate. Then we can call the original probing macro and insert a z_offset change once its done with z_tilt and probing.
 
@@ -289,9 +290,44 @@ You can see that the start macro is phased into different sections. Let's break 
 
 - `_PRINT_START_PHASE_PURGE` - this does an adapative purge. No need to change this.
 
-# _PRINT_START_PHASE_PROBING
+# Overriding the Macros
 
-In order to override this KM macro, we need to get into `macros.cfg` in Mainsail. At the bottom of this file, let's add this block.
+In order to override this KM macro, we need to get into `macros.cfg` in Mainsail. At the bottom of this file, let's add these blocks.
+
+This first one will override the PREHEAT macro to move our probe into position and wait 4 minutes for it to heatsaok.
+
+{% highlight bash %}
+[gcode_macro _PRINT_START_PHASE_PREHEAT]
+rename_existing: KM_PRINT_START_PHASE_PREHEAT
+gcode:
+ # Custom commands to run before the original _PRINT_START_PHASE_PREHEAT
+  
+# Call the renamed original _PRINT_START_PHASE_PREHEAT macro
+  KM_PRINT_START_PHASE_PREHEAT {rawparams}
+
+# Custom commands to run after the original _PRINT_START_PHASE_PREHEAT (if any)
+  G1 X130 Y130 ; move x and y to middle of the bed
+  G0 Z2 ; position beacon over bed
+  M118 ** Heatsoaking Beacon **
+  TEMPERATURE_WAIT sensor="temperature_sensor beacon_coil" MINIMUM=50 MAXIMUM=69
+  WAIT_FOR_CHAMBER_TEMPERATURE
+{% endhighlight %}
+
+The breakdown:
+- `[gcode_macro _PRINT_START_PHASE_PREHEAT]` - We're declaring a macro called `_PRINT_START_PHASE_PREHEAT`.
+
+- `rename_existing: KM_PRINT_START_PHASE_PREHEAT` - Since we already have a macro called `_PRINT_START_PHASE_PREHEAT`, we need to rename the original to something else. KM = klipper-macros.  This allows us to inject commands at the start and end of the macro and then call the original in the middle.
+
+- `KM_PRINT_START_PHASE_PREHEAT {rawparams}` - Call the original KM Macro.
+
+- `G1 X130 Y130` - This puts the toolhead in the middle of the bed.
+- `G0 Z2` - Puts Z height at 2.  This will put the nozzle right next to the bed.
+- `M118 ** Heatsoaking Beacon **` - this is a console output to show whats going on.
+
+- `TEMPERATURE_WAIT sensor="temperature_sensor beacon_coil" MINIMUM=50 MAXIMUM=69` - This command will wait until the beacon_coil temp to reach at least 50c.
+- `WAIT_FOR_CHAMBER_TEMPERATURE` - this is a chamber temp macro I have setup.  This can be ignored for this setup.
+
+Next, we will override the probe macro.
 
 {% highlight bash %}
 [gcode_macro _PRINT_START_PHASE_PROBING]
@@ -308,26 +344,26 @@ gcode:
 
   # Custom commands to run after the original _PRINT_START_PHASE_PROBING (if any)
   WIPE_NOZZLE
-  G28 Z METHOD=CONTACT CALIBRATE=0    ; calibrate z offset only after tilt/mesh
+  G28 Z METHOD=CONTACT CALIBRATE=1    ; calibrate z offset only after tilt/mesh
+  SET_GCODE_OFFSET Z=0.02 ; add a little offset for hotend thermal expansion
 {% endhighlight %}
 
 The breakdown:
 
-- `[gcode_macro _PRINT_START_PHASE_PROBING]` - We're declaring a macro called `_PRINT_START_PHASE_PROBING`.
+- `BED_MESH_CLEAR` - clear any default mesh.
+- `SET_GCODE_OFFSET Z=0` - sets z_offset to 0.
+- `WIPE_NOZZLE` - wipe the nozzle on the brush.  This is a macro to wipe the nozzle.  If you dont' have one, you can leave it and klipper will ignore it.  If you do have one, change this to whatever you macro is called.
+- `G28 Z METHOD=CONTACT CALIBRATE=1` - run the beacon calibrate.
 
-- `rename_existing: KM_PRINT_START_PHASE_PROBING` - Since we already have a macro called `_PRINT_START_PHASE_PROBING`, we need to rename the original to something else. KM = klipper-macros.  This allows us to inject commands at the start and end of the macro and then call the original in the middle.
-
-- `BED_MESH_CLEAR` - clear any default mesh
-- `SET_GCODE_OFFSET Z=0` - sets z_offset to 0
-- `WIPE_NOZZLE` - wipe the nozzle on the brush
-- `G28 Z METHOD=CONTACT CALIBRATE=1` - run the beacon calibrate
-
-- `KM_PRINT_START_PHASE_PROBING {rawparams}` - Call the original probing macro
+- `KM_PRINT_START_PHASE_PROBING {rawparams}` - Call the original probing macro.
 
 - `WIPE_NOZZLE` - wipe the nozzle again
-- `G28 Z METHOD=CONTACT CALIBRATE=0` - run a second calibrate after the z_tilt has been ran
+- `G28 Z METHOD=CONTACT CALIBRATE=1` - run a second calibrate after the z_tilt has been ran.
+- `SET_GCODE_OFFSET Z=0.02` - this will bump up the nozzle a hair to compensate for nozzle expansion once its heated. This should be tweaked based on your machine.
 
-Save `macros.cfg` and then restart.
+Some notes from the beacon docs.  `G28 Z METHOD=CONTACT CALIBRATE=1` will use contact to find zero offset, and then calibrate a beacon model for scan mode.  Alternatively, you can use `G28 Z METHOD=CONTACT CALIBRATE=0` to skip the beacon model creation to save time.  THe choice is yours here.
+
+Save `macros.cfg` and then restart..
 
 # Test the new macro
 
